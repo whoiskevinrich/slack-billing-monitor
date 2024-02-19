@@ -1,6 +1,9 @@
 *.ts
 !*.d.ts
 
+# TS generated files
+dist
+
 # CDK asset staging directory
 .cdk.staging
 cdk.out
