@@ -116,7 +116,7 @@ export class BillingToSlackStack extends cdk.Stack {
 
     // cron expressions: https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-cron-expressions.html
     const timerEventRule = new events.Rule(this, 'timer-event-rule', {
-      schedule: events.Schedule.cron({ minute: '0', hour: '8', weekDay: 'MON' }),
+      schedule: events.Schedule.cron({ minute: '0', hour: '8' }),
       description: 'Run every Monday at 8:00 UTC',
     });
 
