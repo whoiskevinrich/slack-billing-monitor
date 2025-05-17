@@ -46,7 +46,7 @@ describe('handler', () => {
             invokedFunctionArn: 'arn:aws:lambda:us-east-1:123456789012:function:my-function'
         } as any;
     
-        const result = await handler(event, mockContext);
+        await handler(event, mockContext);
     
         expect(mockSns).toHaveReceivedCommandTimes(PublishCommand, 1);
     });
