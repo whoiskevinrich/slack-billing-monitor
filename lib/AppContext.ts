@@ -1,33 +1,37 @@
-import { Construct } from "constructs";
+import { App } from "aws-cdk-lib";
 import { Validator } from "fluentvalidation-ts";
 
 interface IAppContext {
-    readonly appName: string | undefined;
-    readonly awsAccount: string | undefined;
-    readonly awsRegion: string | undefined;
-    readonly slackWorkspaceId: string | undefined;
-    readonly slackChannelId: string | undefined;
-    readonly slackChannelConfigurationArn: string | undefined;
-    readonly logGroupName: string | undefined;
+    readonly appName?: string;
+    readonly awsAccount?: string;
+    readonly awsRegion?: string;
+    readonly slackWorkspaceId?: string;
+    readonly slackChannelId?: string;
+    readonly slackChannelConfigurationArn?: string;
+    readonly logGroupName?: string;
 }
 
 export class AppContext implements IAppContext {
-    public readonly appName: string | undefined = undefined;
-    public readonly awsAccount: string | undefined = undefined;
-    public readonly awsRegion: string | undefined = undefined;
-    public readonly slackWorkspaceId: string | undefined = undefined;
-    public readonly slackChannelId: string | undefined = undefined;
-    public readonly slackChannelConfigurationArn: string | undefined = undefined;
-    public readonly logGroupName: string | undefined = undefined;
+    public readonly appName?: string;
+    public readonly awsAccount?: string;
+    public readonly awsRegion?: string;
+    public readonly slackWorkspaceId: string;
+    public readonly slackChannelId: string;
+    public readonly slackChannelConfigurationArn: string;
+    public readonly logGroupName: string | undefined;
 
-    constructor(construct: Construct) {
-        this.appName = construct.node.tryGetContext("app-name");
-        this.awsAccount = construct.node.tryGetContext("aws-account");
-        this.awsRegion = construct.node.tryGetContext("aws-region");
-        this.slackWorkspaceId = construct.node.tryGetContext("slack-workspace-id");
-        this.slackChannelId = construct.node.tryGetContext("slack-channel-id");
-        this.slackChannelConfigurationArn = construct.node.tryGetContext("slack-channel-configuration-arn");
-        this.logGroupName = construct.node.tryGetContext("log-group-name");
+    constructor(app: App) {
+        console.log({appContext: app.node.getAllContext()});
+
+        this.appName = app.node.tryGetContext("appName");
+        this.awsAccount = app.node.tryGetContext("awsAccount");
+        this.awsRegion = app.node.tryGetContext("awsRegion");
+        this.slackWorkspaceId = app.node.tryGetContext("slackWorkspaceId");
+        this.slackChannelId = app.node.tryGetContext("slackChannelId");
+        this.slackChannelConfigurationArn = app.node.tryGetContext("slackChannelConfigurationArn");
+        this.logGroupName = app.node.tryGetContext("logGroupName");
+
+        console.log({readContext: this})
 
         const validator = new AppContextValidator();
         const validatorResults = validator.validate(this);
@@ -35,7 +39,6 @@ export class AppContext implements IAppContext {
             throw new Error(`⛔ Invalid context values: ${JSON.stringify(validatorResults, null, 2)}`);
         }
     }
-
 }
 
 class AppContextValidator extends Validator<AppContext> {

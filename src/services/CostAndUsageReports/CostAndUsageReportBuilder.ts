@@ -12,6 +12,7 @@ export interface buildReportArgs {
     groupBy?: string;
 }
 
+// todo: move to Report
 export async function buildReport(args: buildReportArgs): Promise<Report> {
     if (args.dates.length === 0) throw new Error('No dates provided');
     if (args.costAndUsageResults.length === 0) throw new Error('No cost and usage results provided');
@@ -31,6 +32,7 @@ export async function buildReport(args: buildReportArgs): Promise<Report> {
 
             let costStr = group.Metrics![args.costAggregation]['Amount'];
             let cost = parseFloat(costStr ?? '0.0');
+            report.totalCost += cost;
 
             const entry = new CostPerDayPerKey({
                 key,

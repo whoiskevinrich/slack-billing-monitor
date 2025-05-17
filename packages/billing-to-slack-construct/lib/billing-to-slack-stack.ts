@@ -3,13 +3,11 @@ import * as iam from 'aws-cdk-lib/aws-iam';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as events from 'aws-cdk-lib/aws-events';
 import * as eventTargets from 'aws-cdk-lib/aws-events-targets';
-import * as destinations from 'aws-cdk-lib/aws-lambda-destinations';
 import * as nodeLambda from 'aws-cdk-lib/aws-lambda-nodejs';
 import * as logs from 'aws-cdk-lib/aws-logs';
 import * as sns from 'aws-cdk-lib/aws-sns';
 import * as chatbot from 'aws-cdk-lib/aws-chatbot';
 import { Construct } from 'constructs';
-import path = require('path');
 
 export interface BillingToSlackStackProps extends cdk.StackProps {
 
@@ -116,8 +114,8 @@ export class BillingToSlackStack extends cdk.Stack {
 
     // cron expressions: https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-cron-expressions.html
     const timerEventRule = new events.Rule(this, 'timer-event-rule', {
-      schedule: events.Schedule.cron({ minute: '0', hour: '8', weekDay: 'MON' }),
-      description: 'Run every Monday at 8:00 UTC',
+      schedule: events.Schedule.rate(cdk.Duration.days(1)),
+      description: 'Run every day at 8:00 UTC',
     });
 
     timerEventRule.addTarget(new eventTargets.LambdaFunction(lambdaFunction));

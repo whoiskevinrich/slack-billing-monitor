@@ -3,9 +3,9 @@ import { PublishCommand, SNSClient } from '@aws-sdk/client-sns';
 import { EventBridgeEvent } from 'aws-lambda';
 import { mockClient } from 'aws-sdk-client-mock';
 import { handler } from './billing-to-slack-stack.report-generator';
-import { sampleCostExplorerDateRange, sampleCostExplorerResponse } from '../../../src/services/aws/cost-explorer-wrapper.sampledata';
+import { sampleCostExplorerDateRange, sampleCostExplorerResponse } from '@src/services/aws/cost-explorer/cost-explorer-wrapper.sampledata';
 
-jest.mock('../../../src/time/buildLookbackRange', () => {
+jest.mock('@src/time/buildLookbackRange', () => {
     return {
         buildLookbackRange: jest.fn(() => {
             return sampleCostExplorerDateRange;
@@ -42,8 +42,11 @@ describe('handler', () => {
 
     it('should send and SNS message', async () => {
         const event = mockEventGenerator();
+        const mockContext = {
+            invokedFunctionArn: 'arn:aws:lambda:us-east-1:123456789012:function:my-function'
+        } as any;
     
-        const result = await handler(event);
+        const result = await handler(event, mockContext);
     
         expect(mockSns).toHaveReceivedCommandTimes(PublishCommand, 1);
     });

@@ -1,6 +1,6 @@
 import { ResultByTime } from "@aws-sdk/client-cost-explorer";
 import { buildReport } from "./CostAndUsageReportBuilder";
-import { sampleCostExplorerResponse, sampleCostExplorerDateRange } from "@src/services/aws/cost-explorer-wrapper.sampledata";
+import { sampleCostExplorerResponse, sampleCostExplorerDateRange } from "@src/services/aws/cost-explorer/cost-explorer-wrapper.sampledata";
 import { Report } from "@src/services/CostAndUsageReports/Report";
 
 describe('buildReport', () => {
