@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
-    "module": "commonjs",
+    "target": "ESNext",
+    "module": "ESNext",
     "lib": [
       "es2020",
       "dom"
@@ -30,7 +30,8 @@
     "paths": {
       "@src/*": ["./src/*"],
       "@packages/*": ["./packages/*"]
-    }
+    },
+    "moduleResolution": "bundler"
   },
   "exclude": [
     "node_modules",
