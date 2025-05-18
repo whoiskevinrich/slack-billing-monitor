@@ -1,9 +1,3 @@
-We use the latest version of AWS CDK v2 to build the infrastructure, not AWS CDK v1, so when talking about CDK, always give instructions for CDK v2.
+We want others to be able to understand our code, so when generating code, always include the necessary comments and documentation. Maintain architectural and design diagrams in the doc/diagrams directory using mermaid.js. Use markdown for documentation. Use marp for presentations and put them in the docs/presentations folder. 
 
-We always write Typescript code, so when talking about code, always give instructions for Typescript.
-
-We always test our code with Vitest, so when talking about tests, always give instructions for Vitest. When generating code, always include unit tests for the code.
-
-We use pnpm as our package manager, so when talking about package management, always give instructions for pnpm. When generating code, always include the package.json file with the necessary dependencies.
-
-We practice SOLID principles, so when generating code, always include the necessary interfaces and types. When generating code, always include the necessary comments and documentation.
+Use TypeScript for code. Use Vitest for testing. Use pnpm for package management. Use AWS CDK v2 for infrastructure. Use SOLID principles for design. Use clean code principles for implementation. Use best practices for security and performance. Use GitHub Actions for CI/CD. Use ESLint and Prettier for code formatting and linting. Use commitizen for commit messages. Use semantic-release for versioning and changelogs.
