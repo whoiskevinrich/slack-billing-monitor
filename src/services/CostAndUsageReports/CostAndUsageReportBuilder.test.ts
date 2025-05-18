@@ -1,6 +1,6 @@
 import { ResultByTime } from "@aws-sdk/client-cost-explorer";
 import { buildReport } from "./CostAndUsageReportBuilder";
-import { sampleCostExplorerResponse, sampleCostExplorerDateRange } from "@src/services/aws/cost-explorer/cost-explorer-wrapper.sampledata";
+import { sampleCostExplorerResponse, sampleCostExplorerDateRange } from "@src/services/aws/cost-explorer/AwsCostExplorerService.sampledata";
 import { Report } from "@src/services/CostAndUsageReports/Report";
 import { describe, beforeAll, it, expect } from "vitest";
 
@@ -35,9 +35,9 @@ describe('buildReport', () => {
 
     it('should build a report with a header detail', async () => {
         expect(sampleResults.details.length).toBeGreaterThan(0);
-        expect(sampleResults.details[0].descriptionColumn).toContain('SERVICE');
-        expect(sampleResults.details[0].descriptionColumn).toContain('Last 7 days');
-        expect(sampleResults.details[0].descriptionColumn).toContain('Yesterday');
+        expect(sampleResults.details[0].descriptionColumn).toContain('Service');
+        expect(sampleResults.details[1].descriptionColumn).toContain('AWS CloudTrail');
+        expect(sampleResults.details[2].descriptionColumn).toContain('AWS Config');
     });
 
     it('should build a sparkline', async () => {

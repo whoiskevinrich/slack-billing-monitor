@@ -1,5 +1,5 @@
 import { CostExplorerClient } from "@aws-sdk/client-cost-explorer";
-import { getCostAndUsage } from "./cost-explorer-wrapper";
+import { AwsCostExplorerService } from "./AwsCostExplorerService";
 import { describe, it, expect, beforeAll } from 'vitest';
 
 beforeAll(() => {
@@ -15,7 +15,9 @@ describe.skip('Cost Explorer Wrapper Integration Test', () => {
         const to = new Date();
         const from = new Date(to.getTime() - 7 * 24 * 60 * 60 * 1000);
 
-        const result = await getCostAndUsage(from, to);
+        const client = new CostExplorerClient();
+        const wrapper = new AwsCostExplorerService(client);
+        const result = await wrapper.getCostAndUsage(from, to);
 
         expect(result).toBeDefined();
         expect(result).toHaveProperty('$metadata.httpStatusCode', 200);

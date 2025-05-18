@@ -1,29 +1,42 @@
 import { Context, EventBridgeEvent } from 'aws-lambda';
-import { ICostFetcher, AwsCostFetcher } from '@src/services/cost';
 import { buildLookbackRange } from '@src/time/buildLookbackRange';
 import { buildReport } from '@src/services/CostAndUsageReports/CostAndUsageReportBuilder';
 import { ReportLine } from '@src/services/CostAndUsageReports/ReportDetail';
 import { ChatbotMessage, ChatbotMessageBuilder } from '@src/services/aws/chatbot/ChatbotMessageBuilder';
 import { padString } from '@src/helpers/strings';
-import { currencyFormatter } from '@src/formatters/currencyFormatter';
-import { INotificationService, SlackNotificationService } from '@src/services/notification';
+import { FakeNotificationService, INotificationService, SlackNotificationService } from '@src/services/notification';
+import { Formatter } from '@src/formatters/Formatter';
+import { ICostExplorerService } from '@src/services/aws/cost-explorer/ICostExplorerService';
+import { FakeCostExplorerService } from '@src/services/aws/cost-explorer/FakeCostExplorerService';
+import { AwsCostExplorerService } from '@src/services/aws/cost-explorer/AwsCostExplorerService';
+import { CostExplorerClient } from '@aws-sdk/client-cost-explorer';
 
+let notificationService: INotificationService;
+let costFetcher: ICostExplorerService;
+
+// Helper to safely interpret env vars as booleans
+function isTrue(value?: string): boolean {
+    return value?.toLowerCase() === 'true';
+}
 
 export async function handler(
     event: EventBridgeEvent<string, void>,
     context: Context,
-    notificationService: INotificationService = new SlackNotificationService(process.env.SLACK_WEBHOOK_URL!),
-    costFetcher: ICostFetcher = new AwsCostFetcher()
 ): Promise<ChatbotMessage> {
     console.log({ event });
 
+    initializeServices(
+        isTrue(process.env.USE_FAKE_NOTIFICATION_SERVICE),
+        isTrue(process.env.USE_FAKE_COST_EXPLORER_SERVICE)
+    );
+
     const accountId = context.invokedFunctionArn.split(':')[4];
     const dateRange = buildLookbackRange();
-    const startDate = dateRange[0].toISOString().slice(0, 10);
-    const endDate = dateRange.at(-1)!.toISOString().slice(0, 10);
+    const startDate = dateRange[0]; // Date object
+    const endDate = dateRange.at(-1)!; // Date object
 
     // Use the abstraction
-    const costAndUsageResults = await costFetcher.fetchCostAndUsage(startDate, endDate);
+    const costAndUsageResults = await costFetcher.getCostAndUsage(startDate, endDate);
     if(!costAndUsageResults) { throw new Error('No cost and usage results')};
 
     const report = await buildReport({
@@ -33,7 +46,7 @@ export async function handler(
         groupBy: 'SERVICE'
     });
 
-    const chatbotMessage = new ChatbotMessageBuilder(`Yesterday's cost was ${currencyFormatter.format(report.totalCost)}`)
+    const chatbotMessage = new ChatbotMessageBuilder(`Yesterday's cost was ${Formatter.currencyFormat(report.totalCost)}`)
         .build();
 
     chatbotMessage.content.description += '\n```\n'
@@ -54,4 +67,20 @@ export async function handler(
     );
 
     return chatbotMessage;
+}
+
+function initializeServices(useFakeNotificationService: boolean, useFakeCostExplorerService: boolean): void {
+
+    
+    notificationService = notificationService ?? useFakeNotificationService
+        ? new FakeNotificationService()
+        : new SlackNotificationService(
+            process.env.SLACK_WEBHOOK_URL!
+        );
+
+    costFetcher = notificationService ?? useFakeCostExplorerService
+        ? new FakeCostExplorerService()
+        : new AwsCostExplorerService(
+            new CostExplorerClient()
+        );
 }

@@ -1,4 +1,4 @@
-export const percentFormatter = new Intl.NumberFormat('en-US', {
-    style: 'percent',
-    maximumFractionDigits: 0,
-});
+/**
+ * @deprecated Use Formatter.percentFormat instead
+ */
+export { Formatter } from './Formatter';

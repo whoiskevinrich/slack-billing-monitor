@@ -1,7 +1,7 @@
 import { mockClient } from 'aws-sdk-client-mock';
 import { CostExplorerClient, GetCostAndUsageCommand } from '@aws-sdk/client-cost-explorer';
-import { sampleCostExplorerResponse, sampleCostExplorerDateRange } from './cost-explorer-wrapper.sampledata';
-import { getCostAndUsage } from './cost-explorer-wrapper';
+import { sampleCostExplorerResponse, sampleCostExplorerDateRange } from './AwsCostExplorerService.sampledata';
+import { AwsCostExplorerService } from './AwsCostExplorerService';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
 const mockCostExplorer = mockClient(CostExplorerClient);
@@ -12,7 +12,9 @@ describe('getCostAndUsage', () => {
         const start = sampleCostExplorerDateRange.at(0)!;
         const end = sampleCostExplorerDateRange.at(-1)!;
         
-        await getCostAndUsage(start, end);
+        const wrapper = new AwsCostExplorerService(mockCostExplorer as any as CostExplorerClient);
+        
+        await wrapper.getCostAndUsage(start, end);
         
         expect(mockCostExplorer.commandCalls(GetCostAndUsageCommand).length).toBe(1);
     });

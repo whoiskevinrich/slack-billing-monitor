@@ -1,47 +1,45 @@
-import { PublishCommand, SNSClient } from '@aws-sdk/client-sns';
 import { EventBridgeEvent } from 'aws-lambda';
-import { mockClient } from 'aws-sdk-client-mock';
-import { handler } from './billing-to-slack-stack.report-generator';
-import { sampleCostExplorerDateRange, sampleCostExplorerResponse } from '@src/services/aws/cost-explorer/cost-explorer-wrapper.sampledata';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { handler } from './billing-to-slack-stack.report-generator';
+import { sampleCostExplorerDateRange, sampleCostExplorerResponse } from '@src/services/aws/cost-explorer/AwsCostExplorerService.sampledata';
+import { INotificationService } from '@src/services/notification';
 
 vi.mock('@src/time/buildLookbackRange', () => ({
     buildLookbackRange: vi.fn(() => sampleCostExplorerDateRange)
 }));
 
-vi.mock('./cost-explorer-wrapper', () => ({
+vi.mock('./CostExplorerWrapper', () => ({
     getCostAndUsage: vi.fn(() => sampleCostExplorerResponse)
 }));
 
 
 describe('handler', () => {
-    const mockSns = mockClient(SNSClient);
-    mockSns.on(PublishCommand).resolves({
-        MessageId: '0'
-    });
+    // Mock notification service
+    const mockNotificationService: INotificationService = {
+        send: vi.fn().mockResolvedValue(undefined)
+    };
 
-    const mockGetCostAndUsage = vi.fn();
-    mockGetCostAndUsage.mockReturnValue(sampleCostExplorerResponse);
+    const OLD_ENV = { ...process.env };
 
     beforeEach(() => {
         vi.useFakeTimers()
             .setSystemTime(new Date('2024-02-07T00:00:00Z'));
+        (mockNotificationService.send as any).mockClear();
     });
 
     afterEach(() => {
-        mockSns.reset();
+        process.env = { ...OLD_ENV };
     });
 
-    it('should send and SNS message', async () => {
+    it('should send a notification', async () => {
         const event = mockEventGenerator();
         const mockContext = {
-            invokedFunctionArn: 'arn:aws:lambda:us-east-1:123456789012:function:my-function'
+            invokedFunctionArn: 'arn:aws:lambda:us-east-1:123456789012:function:my-function',
         } as any;
-    
+        process.env.SLACK_WEBHOOK_URL = 'https://hooks.slack.test/mock-url';
+        process.env.AWS_REGION = 'us-east-1';
         await handler(event, mockContext);
-    
-        // Vitest-compatible assertion for number of PublishCommand calls
-        expect(mockSns.commandCalls(PublishCommand).length).toBe(1);
+        expect(mockNotificationService.send).toHaveBeenCalledTimes(1);
     });
 });
 
@@ -55,6 +53,6 @@ function mockEventGenerator(): EventBridgeEvent<string, void> {
         time: '0',
         region: '0',
         resources: [],
-        detail: undefined
+        detail: undefined,
     };
 }
