@@ -6,3 +6,4 @@ We always test our code with Vitest, so when talking about tests, always give in
 
 We use pnpm as our package manager, so when talking about package management, always give instructions for pnpm. When generating code, always include the package.json file with the necessary dependencies.
 
+We practice SOLID principles, so when generating code, always include the necessary interfaces and types. When generating code, always include the necessary comments and documentation.
