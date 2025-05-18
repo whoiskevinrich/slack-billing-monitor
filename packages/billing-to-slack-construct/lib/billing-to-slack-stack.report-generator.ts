@@ -1,5 +1,4 @@
 import { Context, EventBridgeEvent } from 'aws-lambda';
-import { PublishCommand, SNSClient } from '@aws-sdk/client-sns'
 import { getCostAndUsage } from '@src/services/aws/cost-explorer/cost-explorer-wrapper';
 import { buildLookbackRange } from '@src/time/buildLookbackRange';
 import { buildReport } from '@src/services/CostAndUsageReports/CostAndUsageReportBuilder';
@@ -7,9 +6,14 @@ import { ReportLine } from '@src/services/CostAndUsageReports/ReportDetail';
 import { ChatbotMessage, ChatbotMessageBuilder } from '@src/services/aws/chatbot/ChatbotMessageBuilder';
 import { padString } from '@src/helpers/strings';
 import { currencyFormatter } from '@src/formatters/currencyFormatter';
+import { INotificationService, SlackNotificationService } from '@src/services/notification';
 
 
-export async function handler(event: EventBridgeEvent<string, void>, context: Context): Promise<ChatbotMessage> {
+export async function handler(
+    event: EventBridgeEvent<string, void>,
+    context: Context,
+    notificationService: INotificationService = new SlackNotificationService(process.env.SLACK_WEBHOOK_URL!)
+): Promise<ChatbotMessage> {
     console.log({ event });
 
     const accountId = context.invokedFunctionArn.split(':')[4];
@@ -41,13 +45,11 @@ export async function handler(event: EventBridgeEvent<string, void>, context: Co
 
     console.log({ chatbotMessage });
 
-    const command = new PublishCommand({
-        Message: JSON.stringify(chatbotMessage, null, 2),
-        TopicArn: process.env.SNS_TOPIC_ARN
-    });
-
-    const client = new SNSClient({});
-    await client.send(command);
+    // Use the notification abstraction
+    await notificationService.send(
+        JSON.stringify(chatbotMessage, null, 2),
+        "AWS Billing Report"
+    );
 
     return Promise.resolve(chatbotMessage);
 }
