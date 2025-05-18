@@ -1,5 +1,5 @@
 import { Context, EventBridgeEvent } from 'aws-lambda';
-import { getCostAndUsage } from '@src/services/aws/cost-explorer/cost-explorer-wrapper';
+import { ICostFetcher, AwsCostFetcher } from '@src/services/cost';
 import { buildLookbackRange } from '@src/time/buildLookbackRange';
 import { buildReport } from '@src/services/CostAndUsageReports/CostAndUsageReportBuilder';
 import { ReportLine } from '@src/services/CostAndUsageReports/ReportDetail';
@@ -12,15 +12,18 @@ import { INotificationService, SlackNotificationService } from '@src/services/no
 export async function handler(
     event: EventBridgeEvent<string, void>,
     context: Context,
-    notificationService: INotificationService = new SlackNotificationService(process.env.SLACK_WEBHOOK_URL!)
+    notificationService: INotificationService = new SlackNotificationService(process.env.SLACK_WEBHOOK_URL!),
+    costFetcher: ICostFetcher = new AwsCostFetcher()
 ): Promise<ChatbotMessage> {
     console.log({ event });
 
     const accountId = context.invokedFunctionArn.split(':')[4];
-
     const dateRange = buildLookbackRange();
+    const startDate = dateRange[0].toISOString().slice(0, 10);
+    const endDate = dateRange.at(-1)!.toISOString().slice(0, 10);
 
-    const costAndUsageResults = await getCostAndUsage(dateRange[0], dateRange.at(-1)!);
+    // Use the abstraction
+    const costAndUsageResults = await costFetcher.fetchCostAndUsage(startDate, endDate);
     if(!costAndUsageResults) { throw new Error('No cost and usage results')};
 
     const report = await buildReport({
@@ -45,11 +48,10 @@ export async function handler(
 
     console.log({ chatbotMessage });
 
-    // Use the notification abstraction
     await notificationService.send(
         JSON.stringify(chatbotMessage, null, 2),
         "AWS Billing Report"
     );
 
-    return Promise.resolve(chatbotMessage);
+    return chatbotMessage;
 }
