@@ -1,25 +1,17 @@
-import 'aws-sdk-client-mock-jest';
 import { PublishCommand, SNSClient } from '@aws-sdk/client-sns';
 import { EventBridgeEvent } from 'aws-lambda';
 import { mockClient } from 'aws-sdk-client-mock';
 import { handler } from './billing-to-slack-stack.report-generator';
 import { sampleCostExplorerDateRange, sampleCostExplorerResponse } from '@src/services/aws/cost-explorer/cost-explorer-wrapper.sampledata';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
-jest.mock('@src/time/buildLookbackRange', () => {
-    return {
-        buildLookbackRange: jest.fn(() => {
-            return sampleCostExplorerDateRange;
-        })
-    }
-});
+vi.mock('@src/time/buildLookbackRange', () => ({
+    buildLookbackRange: vi.fn(() => sampleCostExplorerDateRange)
+}));
 
-jest.mock('./cost-explorer-wrapper', () => {
-    return {
-        getCostAndUsage: jest.fn(() => {
-            return sampleCostExplorerResponse;
-        })
-    }
-});
+vi.mock('./cost-explorer-wrapper', () => ({
+    getCostAndUsage: vi.fn(() => sampleCostExplorerResponse)
+}));
 
 
 describe('handler', () => {
@@ -28,11 +20,11 @@ describe('handler', () => {
         MessageId: '0'
     });
 
-    const mockGetCostAndUsage = jest.fn();
+    const mockGetCostAndUsage = vi.fn();
     mockGetCostAndUsage.mockReturnValue(sampleCostExplorerResponse);
 
-    beforeAll(() => {
-        jest.useFakeTimers()
+    beforeEach(() => {
+        vi.useFakeTimers()
             .setSystemTime(new Date('2024-02-07T00:00:00Z'));
     });
 
@@ -48,7 +40,8 @@ describe('handler', () => {
     
         await handler(event, mockContext);
     
-        expect(mockSns).toHaveReceivedCommandTimes(PublishCommand, 1);
+        // Vitest-compatible assertion for number of PublishCommand calls
+        expect(mockSns.commandCalls(PublishCommand).length).toBe(1);
     });
 });
 

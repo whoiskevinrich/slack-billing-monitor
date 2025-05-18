@@ -1,13 +1,14 @@
 import { buildLookbackRange } from './buildLookbackRange';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
 describe('buildLookbackRange', () => {
-    beforeAll(() => {
-        jest.useFakeTimers();
-        jest.setSystemTime(new Date('2024-02-08T00:00:00Z'));
+    beforeEach(() => {
+        vi.useFakeTimers();
+        vi.setSystemTime(new Date('2024-02-08T00:00:00Z'));
     });
 
-    afterAll(() => {
-        jest.useRealTimers();
+    afterEach(() => {
+        vi.useRealTimers();
     });
 
     it('should return an array of dates', () => {

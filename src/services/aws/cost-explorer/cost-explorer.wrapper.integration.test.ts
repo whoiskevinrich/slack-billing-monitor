@@ -1,5 +1,6 @@
 import { CostExplorerClient } from "@aws-sdk/client-cost-explorer";
 import { getCostAndUsage } from "./cost-explorer-wrapper";
+import { describe, it, expect, beforeAll } from 'vitest';
 
 beforeAll(() => {
     try {
@@ -9,7 +10,7 @@ beforeAll(() => {
     };
 });
 
-xdescribe('Cost Explorer Wrapper Integration Test', () => {
+describe.skip('Cost Explorer Wrapper Integration Test', () => {
     it('should sucessfully query AWS', async () => {
         const to = new Date();
         const from = new Date(to.getTime() - 7 * 24 * 60 * 60 * 1000);

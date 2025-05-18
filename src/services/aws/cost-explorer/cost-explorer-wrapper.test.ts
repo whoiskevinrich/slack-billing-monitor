@@ -1,8 +1,8 @@
-import 'aws-sdk-client-mock-jest';
 import { mockClient } from 'aws-sdk-client-mock';
 import { CostExplorerClient, GetCostAndUsageCommand } from '@aws-sdk/client-cost-explorer';
 import { sampleCostExplorerResponse, sampleCostExplorerDateRange } from './cost-explorer-wrapper.sampledata';
 import { getCostAndUsage } from './cost-explorer-wrapper';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
 const mockCostExplorer = mockClient(CostExplorerClient);
 mockCostExplorer.on(GetCostAndUsageCommand).resolves(sampleCostExplorerResponse);
@@ -14,6 +14,6 @@ describe('getCostAndUsage', () => {
         
         await getCostAndUsage(start, end);
         
-        expect(mockCostExplorer).toHaveReceivedCommandTimes(GetCostAndUsageCommand, 1);
+        expect(mockCostExplorer.commandCalls(GetCostAndUsageCommand).length).toBe(1);
     });
 });
