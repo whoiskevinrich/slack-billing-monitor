@@ -1,3 +1,4 @@
+import { expect, it } from "vitest";
 import { groupBy } from "./arrays";
 
 it('should group by key', () => {

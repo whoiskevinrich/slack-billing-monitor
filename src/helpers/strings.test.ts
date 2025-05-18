@@ -1,3 +1,4 @@
+import { describe, test, expect } from "vitest";
 import { padString, toTitleCase } from "./strings";
 
 describe('padString', () => {
