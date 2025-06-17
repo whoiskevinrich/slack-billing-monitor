@@ -1,11 +1,13 @@
-*.js
-!jest.config.js
-*.d.ts
+# Node.js dependencies
 node_modules
-*.ps1
-*.bat
 
 # CDK asset staging directory
 .cdk.staging
 cdk.out
-/dist
+
+# Typescript build artifacts
+tsconfig.tsbuildinfo
+dist
+*.js
+!jest.config.js
+*.d.ts

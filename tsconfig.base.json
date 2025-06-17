@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "lib": [
+      "es2020",
+      "dom"
+    ],
+    // "typeRoots": [
+    //   "./node_modules/@types"
+    // ],
+    // "types": [],
+    // "outDir": "dist",
+    // "baseUrl": ".",
+    // "paths": {
+    //   "@src/*": ["./src/*"],
+    //   "@packages/*": ["./packages/*"]
+    // },
+    "moduleResolution": "bundler"
+  },
+}

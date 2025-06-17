@@ -58,6 +58,35 @@ importers:
         specifier: ^3.2.3
         version: 3.2.3(@types/node@20.11.6)(tsx@4.20.3)
 
+  apps/cdk:
+    dependencies:
+      '@wikr/identity-center-constructs':
+        specifier: workspace:*
+        version: link:../../packages/aws-identity-center-constructs
+      aws-cdk-lib:
+        specifier: 2.196.0
+        version: 2.196.0(constructs@10.4.2)
+      constructs:
+        specifier: ^10.4.2
+        version: 10.4.2
+
+  apps/cli: {}
+
+  packages/aws-identity-center-constructs:
+    dependencies:
+      aws-cdk-lib:
+        specifier: 2.196.0
+        version: 2.196.0(constructs@10.4.2)
+      constructs:
+        specifier: ^10.4.2
+        version: 10.4.2
+    devDependencies:
+      vitest:
+        specifier: ^3.2.3
+        version: 3.2.3(@types/node@20.11.6)(tsx@4.20.3)
+
+  packages/billing-to-slack-construct: {}
+
 packages:
 
   '@ampproject/remapping@2.3.0':

@@ -1,0 +1,21 @@
+{
+  "name": "cdk",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "synth": "npx cdk synth",
+    "build": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.11.0",
+  "dependencies": {
+    "@wikr/identity-center-constructs": "workspace:*",
+    "aws-cdk-lib": "2.196.0",
+    "constructs": "^10.4.2"
+  }
+}

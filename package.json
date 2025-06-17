@@ -1,14 +1,14 @@
 {
   "name": "wikr-slack-billing-monitor",
   "version": "0.1.0",
+  "private": true,
   "bin": {
     "wikr-slack-billing-monitor": "bin/wikr-slack-billing-monitor.js"
   },
   "scripts": {
-    "build": "tsc",
-    "watch": "tsc -w",
-    "test": "vitest",
-    "test:coverage": "vitest run --coverage",
+    "build": "pnpm --filter \"*\" build",
+    "test": "pnpm --filter \"@wikr/*\" test",
+    "test:coverage": "pnpm --filter \"@wikr\" vitest run --coverage",
     "cdk": "cdk"
   },
   "packageManager": "pnpm@10.11.0",
