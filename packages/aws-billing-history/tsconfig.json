@@ -2,7 +2,7 @@
     "extends": "../../tsconfig.base.json",
     "compilerOptions": {
         "outDir": "./dist",
-        "rootDir": ".",
+        "rootDir": "./src",
         "composite": true,
         "declaration": true,
         "declarationMap": true,
@@ -12,6 +12,7 @@
             "./node_modules/@types"
         ],
         "types": [],
+        "baseUrl": ".",
         "strict": true,
         "noImplicitAny": true,
         "strictNullChecks": true,
@@ -27,12 +28,13 @@
         "strictPropertyInitialization": false,
         "resolveJsonModule": true,
     },
-    // "include": [
-    //     "src/**/*.ts"
-    // ],
+    "include": [
+        "src/**/*.ts"
+    ],
     "exclude": [
         "node_modules",
         "**/*.spec.ts",
+        "**/*.test.ts",
         "cdk.out",
         "dist",
         "coverage",

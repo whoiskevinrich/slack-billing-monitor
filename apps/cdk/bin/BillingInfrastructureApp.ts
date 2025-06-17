@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
 import * as cdk from 'aws-cdk-lib';
-import { BillingToSlackStack } from '../packages/billing-to-slack-construct/lib/billing-to-slack-stack';
+import { BillingToSlackStack } from '@wikr/billing-to-slack-constructs';
 import { AppContext } from '../lib/AppContext';
 
 const app = new cdk.App();

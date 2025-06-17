@@ -7,6 +7,7 @@
   },
   "scripts": {
     "build": "pnpm --filter \"*\" build",
+    "build:cdk": "pnpm --filter \"cdk...\" build",
     "test": "pnpm --filter \"@wikr/*\" test",
     "test:coverage": "pnpm --filter \"@wikr\" vitest run --coverage",
     "cdk": "cdk"

@@ -60,6 +60,9 @@ importers:
 
   apps/cdk:
     dependencies:
+      '@wikr/billing-to-slack-constructs':
+        specifier: workspace:*
+        version: link:../../packages/billing-to-slack-construct
       '@wikr/identity-center-constructs':
         specifier: workspace:*
         version: link:../../packages/aws-identity-center-constructs
@@ -71,6 +74,19 @@ importers:
         version: 10.4.2
 
   apps/cli: {}
+
+  packages/aws-billing-history:
+    dependencies:
+      '@aws-sdk/client-cost-explorer':
+        specifier: ^3.830.0
+        version: 3.830.0
+    devDependencies:
+      aws-sdk-client-mock:
+        specifier: ^3.1.0
+        version: 3.1.0
+      vitest:
+        specifier: ^3.2.3
+        version: 3.2.3(@types/node@20.11.6)(tsx@4.20.3)
 
   packages/aws-identity-center-constructs:
     dependencies:
@@ -85,7 +101,18 @@ importers:
         specifier: ^3.2.3
         version: 3.2.3(@types/node@20.11.6)(tsx@4.20.3)
 
-  packages/billing-to-slack-construct: {}
+  packages/billing-to-slack-construct:
+    dependencies:
+      aws-cdk-lib:
+        specifier: 2.196.0
+        version: 2.196.0(constructs@10.4.2)
+      constructs:
+        specifier: ^10.4.2
+        version: 10.4.2
+    devDependencies:
+      vitest:
+        specifier: ^3.2.3
+        version: 3.2.3(@types/node@20.11.6)(tsx@4.20.3)
 
 packages:
 

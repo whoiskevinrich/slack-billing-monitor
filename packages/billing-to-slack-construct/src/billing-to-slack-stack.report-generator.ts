@@ -1,4 +1,5 @@
 import { Context, EventBridgeEvent } from 'aws-lambda';
+import { } from '@wikr/aws-billing-history';
 import { buildLookbackRange } from '@src/time/buildLookbackRange';
 import { buildReport } from '@src/services/CostAndUsageReports/CostAndUsageReportBuilder';
 import { ReportLine } from '@src/services/CostAndUsageReports/ReportDetail';
@@ -37,10 +38,10 @@ export async function handler(
 
     // Use the abstraction
     const costAndUsageResults = await costFetcher.getCostAndUsage(startDate, endDate);
-    if(!costAndUsageResults) { throw new Error('No cost and usage results')};
+    if (!costAndUsageResults) { throw new Error('No cost and usage results') };
 
     const report = await buildReport({
-        dates: dateRange, 
+        dates: dateRange,
         costAndUsageResults,
         costAggregation: 'BlendedCost',
         groupBy: 'SERVICE'
@@ -71,7 +72,7 @@ export async function handler(
 
 function initializeServices(useFakeNotificationService: boolean, useFakeCostExplorerService: boolean): void {
 
-    
+
     notificationService = notificationService ?? useFakeNotificationService
         ? new FakeNotificationService()
         : new SlackNotificationService(

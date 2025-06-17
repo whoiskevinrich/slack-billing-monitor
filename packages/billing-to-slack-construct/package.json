@@ -1,5 +1,6 @@
 {
-  "name": "billing-to-slack-construct",
+  "name": "@wikr/billing-to-slack-constructs",
+  "private": true,
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -9,7 +10,15 @@
     "test:watch": "vitest"
   },
   "keywords": [],
-  "author": "",
+  "author": "whoiskevinrich@gmail.com",
   "license": "ISC",
-  "packageManager": "pnpm@10.11.0"
+  "packageManager": "pnpm@10.11.0",
+  "devDependencies": {
+    "vitest": "^3.2.3"
+  },
+  "dependencies": {
+    "@wikr/aws-billing-history": "workspace:*",
+    "aws-cdk-lib": "2.196.0",
+    "constructs": "^10.4.2"
+  }
 }

@@ -15,6 +15,7 @@
   "packageManager": "pnpm@10.11.0",
   "dependencies": {
     "@wikr/identity-center-constructs": "workspace:*",
+    "@wikr/billing-to-slack-constructs": "workspace:*",
     "aws-cdk-lib": "2.196.0",
     "constructs": "^10.4.2"
   }
