@@ -1,4 +1,4 @@
-import { Formatter } from "../../formatters/Formatter";
+import { StringFormatter } from "../../formatters/string-formatter";
 import { padString } from "../../helpers/strings";
 
 export type ReportLine = {
@@ -18,7 +18,7 @@ export class ReportDetailItem implements ReportLine {
         this.descriptionColumn = description;
         this.history = history;
         const lastHistoryValue = history.length > 0 ? history[history.length - 1] : 0;
-        this.yesterdayCostColumn = Formatter.currencyFormat(lastHistoryValue).replace('$', '$  ');
+        this.yesterdayCostColumn = StringFormatter.currencyFormat(lastHistoryValue).replace('$', '$  ');
     }
 
     public get sparklineColumn() {
@@ -48,7 +48,7 @@ export class ReportDetailItem implements ReportLine {
             ? final
             : (final - initial) / Math.abs(initial);
 
-        const stringResult = Formatter.percentFormat(numericResult).padStart(5);
+        const stringResult = StringFormatter.percentFormat(numericResult).padStart(5);
         return stringResult.endsWith(' 0%') ? padString('-', 5) : stringResult;
     }
 }

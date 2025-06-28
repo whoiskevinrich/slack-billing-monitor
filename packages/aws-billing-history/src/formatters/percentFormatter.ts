@@ -1,4 +1,4 @@
 /**
  * @deprecated Use Formatter.percentFormat instead
  */
-export { Formatter } from './Formatter';
+export { StringFormatter as Formatter } from './string-formatter';
