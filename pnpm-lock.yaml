@@ -81,9 +81,15 @@ importers:
         specifier: ^3.830.0
         version: 3.830.0
     devDependencies:
+      '@types/node':
+        specifier: 20.11.6
+        version: 20.11.6
       aws-sdk-client-mock:
         specifier: ^3.1.0
         version: 3.1.0
+      typescript:
+        specifier: ~5.3.3
+        version: 5.3.3
       vitest:
         specifier: ^3.2.3
         version: 3.2.3(@types/node@20.11.6)(tsx@4.20.3)
@@ -103,6 +109,9 @@ importers:
 
   packages/billing-to-slack-construct:
     dependencies:
+      '@wikr/aws-billing-history':
+        specifier: workspace:*
+        version: link:../aws-billing-history
       aws-cdk-lib:
         specifier: 2.196.0
         version: 2.196.0(constructs@10.4.2)
