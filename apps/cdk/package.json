@@ -14,9 +14,13 @@
   "license": "ISC",
   "packageManager": "pnpm@10.11.0",
   "dependencies": {
-    "@wikr/identity-center-constructs": "workspace:*",
     "@wikr/billing-to-slack-constructs": "workspace:*",
+    "@wikr/identity-center-constructs": "workspace:*",
     "aws-cdk-lib": "2.196.0",
     "constructs": "^10.4.2"
+  },
+  "devDependencies": {
+    "@types/node": "20.11.6",
+    "typescript": "~5.3.3"
   }
 }
