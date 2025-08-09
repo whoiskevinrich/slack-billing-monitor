@@ -1,7 +1,7 @@
 /**
  * Utility class for formatting currency and percent values.
  */
-export class Formatter {
+export class StringFormatter {
   private static currency = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
@@ -16,13 +16,13 @@ export class Formatter {
    * Format a number as USD currency.
    */
   static currencyFormat(value: number): string {
-    return Formatter.currency.format(value);
+    return StringFormatter.currency.format(value);
   }
 
   /**
    * Format a number as a percent (no decimals).
    */
   static percentFormat(value: number): string {
-    return Formatter.percent.format(value);
+    return StringFormatter.percent.format(value);
   }
 }

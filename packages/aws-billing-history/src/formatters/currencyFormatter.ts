@@ -1,4 +1,4 @@
 /**
  * @deprecated Use Formatter.currencyFormat instead
  */
-export { Formatter } from './Formatter';
+export { StringFormatter as Formatter } from './string-formatter';
