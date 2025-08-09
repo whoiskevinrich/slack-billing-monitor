@@ -10,7 +10,7 @@ export interface PermissionSetProps {
     readonly description?: string;
     readonly managedPolicyArns?: string[];
     readonly inlinePolicy?: InlinePolicy;
-    readonly tags?: [{ [key: string]: string }];
+    readonly tags?: Array<Record<string, string>>;
     readonly sessionDuration?: Duration;
 }
 
