@@ -10,7 +10,7 @@ This file tracks code quality suggestions, best practices, and progress on impro
 
 ### 2. Optional Properties
 
-- [ ] Review and ensure all optional properties are handled safely and consistently.
+- [x] Review and ensure all optional properties are handled safely and consistently. (2025-08-09)
 
 ### 3. Immutability
 

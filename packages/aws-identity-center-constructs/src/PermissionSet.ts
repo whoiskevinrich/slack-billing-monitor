@@ -4,22 +4,56 @@ import { Construct } from "constructs";
 import { InlinePolicy } from "./types/InlinePolicy";
 
 
+
+/**
+ * Properties for configuring a PermissionSet.
+ *
+ * @property instanceArn The ARN of the SSO instance. (required)
+ * @property name The name of the permission set. (required)
+ * @property description An optional description for the permission set. Defaults to undefined.
+ * @property managedPolicyArns Optional list of managed policy ARNs to attach. Defaults to undefined.
+ * @property inlinePolicy Optional inline policy object. Defaults to undefined.
+ * @property tags Optional array of tags as key-value pairs. Defaults to undefined.
+ * @property sessionDuration Optional session duration. Defaults to undefined.
+ */
 export interface PermissionSetProps {
+    /** The ARN of the SSO instance. */
     readonly instanceArn: string;
+    /** The name of the permission set. */
     readonly name: string;
+    /** An optional description for the permission set. */
     readonly description?: string;
+    /** Optional list of managed policy ARNs to attach. */
     readonly managedPolicyArns?: string[];
+    /** Optional inline policy object. */
     readonly inlinePolicy?: InlinePolicy;
+    /** Optional array of tags as key-value pairs. */
     readonly tags?: Array<Record<string, string>>;
+    /** Optional session duration. */
     readonly sessionDuration?: Duration;
 }
 
-export class PermissionSet extends Resource {
 
+/**
+ * Represents a PermissionSet resource in AWS SSO.
+ *
+ * Optional properties are handled safely and default to undefined if not provided.
+ *
+ * @property description Optional description. Defaults to undefined.
+ * @property managedPolicyArns Optional list of managed policy ARNs. Defaults to undefined.
+ * @property inlinePolicy Optional inline policy. Defaults to undefined.
+ * @property sessionDuration Optional session duration (ISO string). Defaults to undefined.
+ */
+export class PermissionSet extends Resource {
+    /** The name of the permission set. */
     public readonly permissionSetName: string;
+    /** Optional description. */
     public readonly description?: string;
+    /** Optional list of managed policy ARNs. */
     public readonly managedPolicyArns?: string[];
+    /** Optional inline policy. */
     public readonly inlinePolicy?: InlinePolicy;
+    /** Optional session duration (ISO string). */
     public readonly sessionDuration?: string;
     private readonly instanceArn: string;
 
@@ -34,7 +68,6 @@ export class PermissionSet extends Resource {
         this.validateManagedPolicyArns(props.managedPolicyArns);
         this.validateInlinePolicy(props.inlinePolicy);
         this.validateSessionDuration(props.sessionDuration);
-
 
         this.permissionSetName = props.name;
         this.description = props.description;
